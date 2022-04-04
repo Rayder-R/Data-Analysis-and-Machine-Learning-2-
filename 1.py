@@ -59,3 +59,6 @@ train_label_onehot = np_utils.to_categorical(train_label)
 test_label_onehot = np_utils.to_categorical(test_label)
 print(train_label_onehot[0:5])
 
+from keras.models import Sequential
+model = Sequential()
+
