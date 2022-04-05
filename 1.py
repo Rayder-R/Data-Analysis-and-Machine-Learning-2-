@@ -1,6 +1,9 @@
-from keras.datasets import mnist 
 import matplotlib.pyplot as plt
-
+# Keras
+from keras.datasets import mnist 
+from keras.utils import np_utils
+from keras.models import Sequential
+from keras.layers import Dense
 # 載入資料 mnist 數字
 (train_feature, train_label),(test_feature, test_label) = mnist.load_data()
 print("train_feature),(train_label): ",len(train_feature),len(train_label))
@@ -12,7 +15,7 @@ def show_image(image):
     plt.imshow(image, cmap='binary') # 使用灰階
     plt.show()
 
-show_image(train_feature[0])
+# show_image(train_feature[0])
 print("train_label[0]: ",train_label[0])
 
 def show_image_label_prediction(image, labels, predictions, start_id, num = 10):
@@ -39,7 +42,7 @@ def show_image_label_prediction(image, labels, predictions, start_id, num = 10):
         start_id += 1
     plt.show()
 
-show_image_label_prediction(train_feature, train_label,[],0,10)
+# show_image_label_prediction(train_feature, train_label,[],0,10)
 
 train_feature_vector = train_feature.reshape(len(train_feature),784).astype('float32')
 
@@ -53,12 +56,24 @@ train_feature_narmalize = train_feature_vector / 255
 test_feature_narmalize = test_feature_vector / 255
 # print(train_feature_narmalize[0])
 
-from keras.utils import np_utils
+
 print(train_label[0:5]) # [5 0 4 1 9]
 train_label_onehot = np_utils.to_categorical(train_label)
 test_label_onehot = np_utils.to_categorical(test_label)
 print(train_label_onehot[0:5])
 
-from keras.models import Sequential
+# 建立模型
 model = Sequential()
+
+
+# 建立輸出層和隱藏層
+model.add(Dense(units=256, input_dim=784, kernel_initializer='normal', activation='relu'))
+# 建立輸出層
+model.add(Dense(units=10, kernel_initializer='normal', activation='softmax'))
+# 訓練模型
+model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
+# model.fit(x = 特徵值, y = 標籤, validation_split = 驗證資料百分比, 
+#           epochs = 訓練次數, batch_size = 每批次有多少筆 verbose = n)
+train_history = model.fit(x=train_feature_narmalize, y=train_label_onehot, \
+                          validation_split=0.2, epochs=10, batch_size=200, verbose=2)
 
