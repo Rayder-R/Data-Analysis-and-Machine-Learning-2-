@@ -5,11 +5,26 @@ from keras.utils import np_utils
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.models import load_model
+
+import glob, cv2
 import numpy as np
 
-# 載入資料 mnist 
-# 建立訓練資料和測試資料，包誇訓練特徵集、訓練標籤和測試特徵集、測試標籤
-(train_feature, train_label),(test_feature, test_label) = mnist.load_data()
+# 使用訓練好的模型來判斷 \imagedata 資料夾裡自行繪製好的數字圖片
+# 圖片檔名的第一個字為數字本身正確的號碼，也作為label
+
+files = glob.glob("imagedata\*.jpg")
+test_feature = []
+test_label = []
+for file in files:
+    img = cv2.imread(file)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) #　灰階
+    _, img = cv2.threshold(img, 120, 255, cv2.THRESH_BINARY_INV) # 轉為反相黑白
+    test_feature.append(img)
+    label = file[10:11]
+    test_label.append(int(label))
+
+test_feature = np.array(test_feature)
+test_label = np.array(test_label)
 
 def show_image_label_prediction(image, labels, prediction, start_id, num = 10):
     plt.gcf().set_size_inches(12, 14)
@@ -35,20 +50,20 @@ def show_image_label_prediction(image, labels, prediction, start_id, num = 10):
         start_id += 1
     plt.show()
 
-# show_image_label_prediction(train_feature, train_label,[],0,10)
+print(test_feature.shape)
 
 # 將Features 特徵值換為784個 float 數字一為向量
 test_feature_vector = test_feature.reshape(len(test_feature),784).astype('float32')
 
 # 將Features 標準化 將255 轉換成 0 ~ 1
+
 test_feature_narmalize = test_feature_vector / 255
 
 print("載入模型 <Mnist_mlp_model.h5>")
 model = load_model('Mnist_mlp_model.h5')
 
-
 # 預測
 prediction = np.argmax(model.predict(test_feature_narmalize), axis=1)
 
 # 顯示圖像、預測值、真實值
-show_image_label_prediction(test_feature, test_label, prediction, 0)
+show_image_label_prediction(test_feature, test_label, prediction, 0, len(test_feature))
