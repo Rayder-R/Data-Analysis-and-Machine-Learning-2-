@@ -82,7 +82,7 @@ model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accurac
 # model.fit(x = 特徵值, y = 標籤, validation_split = 驗證資料百分比, 
 #           epochs = 訓練次數, batch_size = 每批次有多少筆 verbose = n)
 train_history = model.fit(x=train_feature_narmalize, y=train_label_onehot, \
-                          validation_split=0.2, epochs=1, batch_size=400, verbose=2)
+                          validation_split=0.2, epochs=20, batch_size=200, verbose=2)
 
 # 評估準確率
 scores = model.evaluate(test_feature_narmalize, test_label_onehot)
@@ -94,5 +94,5 @@ prediction = np.argmax(model.predict(test_feature_narmalize), axis=1)
 # 顯示圖像、預測值、真實值
 show_image_label_prediction(test_feature, test_label, prediction)
 
-model.save('Mnist_mlp_model2.h5')
+model.save('.\Keras_Mnist(MLP)\Mnist_mlp_model3.h5')
 print("模型儲存 <Mnist_mlp_model.h5>")

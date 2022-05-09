@@ -44,7 +44,7 @@ test_feature_vector = test_feature.reshape(len(test_feature),784).astype('float3
 test_feature_narmalize = test_feature_vector / 255
 
 print("載入模型 <Mnist_mlp_model.h5>")
-model = load_model('Mnist_mlp_model.h5')
+model = load_model('.\Keras_Mnist(MLP)\Mnist_mlp_model3.h5')
 
 
 # 預測

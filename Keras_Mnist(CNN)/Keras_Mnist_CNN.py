@@ -1,8 +1,9 @@
-from operator import mod
 from keras.layers import Conv2D, MaxPool2D, Dropout, Flatten, Dense
 from keras.models import Sequential
-import matplotlib.pyplot as plt
 from keras.datasets import mnist
+
+import matplotlib.pyplot as plt
+
 import numpy as np
 from keras.utils import np_utils
 np.random.seed(10)
@@ -38,10 +39,12 @@ def show_imasge_labels_prediction(images, label, prediction, star_id, num=10):
 print(len(train_feature))
 # 將 Feature 特徵值換為 60000*28*28*1 的 4 維矩陣
 train_feature_vector = train_feature.reshape(len(train_feature),28,28,1).astype('float32')
+# prediction 測試用 test
 test_feature_vector = test_feature.reshape(len(test_feature),28,28,1).astype('float32')
 
 # feature 特徵值標準化
 train_feature_normalize = train_feature_vector/255
+# prediction 測試用 test
 test_feature_normalize = test_feature_vector/255
 # print(train_feature_normalize )
 
@@ -54,7 +57,7 @@ print(test_label[1])
 # 建立模型
 model = Sequential()
 # 建立卷積層
-model.add(Conv2D(filter=10,
+model.add(Conv2D(filters=10,
                 kernel_size=(3,3),
                 padding='same',
                 input_shape=(28,28,1),
@@ -82,3 +85,32 @@ model.add(Flatten())
 model.add(Dense(units=256, activation='relu'))
 
 # 建立輸出層
+model.add(Dense(units=10,activation='softmax'))
+
+# 定義訓練方式
+model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
+
+# 以(train_feature_normalize,train_feature_onehot) 資料訓練，
+# 訓練資料保留 20% 做驗證, 訓練 n 次, 每筆讀取 n 筆資料, 顯示 簡易 訓練過程
+train_history = model.fit(x=train_feature_normalize,
+                          y=train_feature_onehot, validation_split=0.2,
+                          epochs=10, batch_size=200, verbose=2)
+
+# 評估準確度
+scores = model.evaluate(test_feature_normalize, test_feature_onehot)
+print('\n準確率=',scores[1])
+
+# save
+model.save('Mnist_cnn_model.h5')
+print("\n Mnist_cnn_model.h5 模型儲存完畢")
+model.save_weights("Mnist_cnn_model.weight")
+print("\n Mnist_cnn_model.weight 模型參數儲存完畢")
+
+# del model
+
+# 預測
+prediction = model.predict(test_feature_normalize)
+
+# 顯示
+show_imasge_labels_prediction(test_feature,test_label,prediction,0)
+
