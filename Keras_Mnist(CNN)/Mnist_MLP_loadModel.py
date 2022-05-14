@@ -1,4 +1,3 @@
-import string
 import matplotlib.pyplot as plt
 import numpy as np
 from keras.datasets import mnist
@@ -46,9 +45,9 @@ test_feature_normalize = test_feature_vector/255
 
 
 print("載入模型 Mnist_cnn_model.h5")
-model = load_model('Mnist_cnn_model.h5')
+model = load_model('.\Keras_Mnist(CNN)\Mnist_cnn_model.h5')
 
-# 預測
+# 預測  (函數版本已不是用)
 # prediction = model.predict_classes(test_feature_normalize) 已棄用 classes .astype(int)
 prediction = model.predict(test_feature_normalize)
 print(prediction)
