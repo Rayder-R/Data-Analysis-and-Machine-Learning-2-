@@ -8,30 +8,6 @@ import numpy as np
 from keras.utils import np_utils
 np.random.seed(10)
 
-
-def show_imasge_labels_prediction(images, label, prediction, star_id, num=10):
-    plt.gcf().set_size_inches(12, 14)
-    if num > 25:
-        num = 25
-    for i in range(0, num):
-        ax = plt.subplot(5, 5, 1+i)
-        # 顯示黑白圖片
-        ax.imshow(images[star_id], cmap='binary')
-
-        # 有 AI 預測結果資料 在標題顯示預測結果
-        if(len(prediction) > 0):
-            title = 'ai = ' + str(prediction[i])
-            # 預測正確顯示 (o), 錯誤顯示 (x)
-            title += (' (o)' if prediction[i] == label[i] else ' (x)')
-            title += '\nlabel = ' + str(label[i])
-            # 沒有 AI 預測結果資料, 只在標題顯示真實數值
-        else:
-            title = 'label = ' + str(label[i])
-        ax.set_title(title,fontsize=12)
-        ax.set_xtick([]);ax.set_ytick([])
-        star_id += 1
-    plt.show()
-
 # 建立訓練資料和測試資料，包誇訓練資料、訓練標籤和測試特徵集、測試標籤
 (train_feature, train_label),\
 (test_feature, test_label) = mnist.load_data()
@@ -105,12 +81,3 @@ model.save('Mnist_cnn_model.h5')
 print("\n Mnist_cnn_model.h5 模型儲存完畢")
 model.save_weights("Mnist_cnn_model.weight")
 print("\n Mnist_cnn_model.weight 模型參數儲存完畢")
-
-# del model
-
-# 預測
-prediction = model.predict(test_feature_normalize)
-
-# 顯示
-show_imasge_labels_prediction(test_feature,test_label,prediction,0)
-

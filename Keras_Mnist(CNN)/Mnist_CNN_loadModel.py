@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from keras.datasets import mnist
 from keras.models import load_model
+from keras.utils import np_utils
 
 def show_imasge_labels_prediction(images, label, prediction, star_id, num=10):
     plt.gcf().set_size_inches(12, 14)
@@ -43,9 +44,18 @@ test_feature_vector = test_feature.reshape(len(test_feature),28,28,1).astype('fl
 # prediction 測試用 test
 test_feature_normalize = test_feature_vector/255
 
+# label 轉換為 One-Hot Encoding 編碼 
+# train_label_onehot = np_utils.to_categorical(train_label)
+
+test_label_onehot = np_utils.to_categorical(test_label)
 
 print("載入模型 Mnist_cnn_model.h5")
 model = load_model('.\Keras_Mnist(CNN)\Mnist_cnn_model.h5')
+
+# 評估準確率
+scores = model.evaluate(test_feature_normalize, test_label_onehot)
+print("\n準確率=", scores[1])
+
 
 # 預測  (函數版本已不是用)
 # prediction = model.predict_classes(test_feature_normalize) 已棄用 classes .astype(int)
