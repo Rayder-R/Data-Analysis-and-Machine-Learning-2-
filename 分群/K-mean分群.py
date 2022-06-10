@@ -67,6 +67,8 @@ print(df_telco.PaymentMethod.unique())
 # ==================================================================
 
 
+
+
 def percentage_stacked_plot(columns_to_plot, super_title):
     
     '''
@@ -82,7 +84,7 @@ def percentage_stacked_plot(columns_to_plot, super_title):
     number_of_rows = math.ceil(len(columns_to_plot)/2)
 
     # create a figure
-    fig = plt.figure(figsize=(12, 5 * number_of_rows)) 
+    fig = plt.figure(figsize=(12, 7 * number_of_rows)) 
     fig.suptitle(super_title, fontsize=22,  y=.95)
  
 
@@ -105,7 +107,7 @@ def percentage_stacked_plot(columns_to_plot, super_title):
 
         # set title and labels 
         ax.set_title( column + ' 人數比例分析',
-                     fontsize=16, loc='left')
+                     fontsize=14, loc='left')
 
         ax.tick_params(rotation='auto')
 
@@ -115,17 +117,28 @@ def percentage_stacked_plot(columns_to_plot, super_title):
             ax.spines[spine_name].set_visible(False)
     plt.show()
 
-# demographic column names 
-# ['性別'，'老年人'，'合作夥伴'，'家屬']
-demographic_columns = ['gender', 'SeniorCitizen', 'Partner', 'Dependents']
+# # demographic column names 
+# # ['性別'，'老年人'，'合作夥伴'，'家屬']
+# demographic_columns = ['gender', 'SeniorCitizen', 'Partner', 'Dependents']
 
-# stacked plot of demographic columns
-percentage_stacked_plot(demographic_columns, '人口統計分析')
+# # stacked plot of demographic columns
+# percentage_stacked_plot(demographic_columns, '人口統計分析')
 
 
-# customer account column names
-# （合同、無紙化計費、支付方式）
-account_columns = ['Contract', 'PaperlessBilling', 'PaymentMethod']
+# # customer account column names
+# # （合同、無紙化計費、支付方式）
+# account_columns = ['Contract', 'PaperlessBilling', 'PaymentMethod']
 
-# stacked plot of customer account columns
-percentage_stacked_plot(account_columns, '客戶帳戶分析')
+# # stacked plot of customer account columns
+# percentage_stacked_plot(account_columns, '客戶帳戶分析')
+
+
+
+# services column names
+# “互聯網服務”、“在線安全”、“在線備份”、“設備保護”、“技術支持”
+services_columns = ['InternetService', 'OnlineSecurity','OnlineBackup', 'DeviceProtection', 'TechSupport']
+
+# stacked plot of services columns
+percentage_stacked_plot(services_columns, 'Services Information( “互聯網服務”、“在線安全”、“在線備份”、“設備保護”、“技術支持”)')
+
+
