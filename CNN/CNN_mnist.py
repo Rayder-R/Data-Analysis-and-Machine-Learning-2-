@@ -1,61 +1,28 @@
-import matplotlib.pyplot as plt
 import numpy as np
-from tensorflow import keras
-from keras.datasets import mnist
-from keras.models import load_model
-from keras.utils import to_categorical
+import keras
+import tensorflow as tf
+import os
+from keras import layers
+os.environ["TF_ENABLE_ONEDNN_OPTS"] = "1"
+# 讀取 MNIST 手寫數字資料集
+(_, _), (test_feature, test_label) = keras.datasets.mnist.load_data()
 
-
-def show_image_labels_prediction(images, label, prediction, start_id, num=10):
-    plt.gcf().set_size_inches(12, 14)
-    images = np.array(images)  # 確保是 NumPy 陣列
-    if num > 25:
-        num = 25
-    for i in range(0, num):
-        ax = plt.subplot(5, 5, 1 + i)
-        ax.imshow(images[start_id].squeeze(), cmap="binary")
-
-        if len(prediction) > 0:
-            title = f"ai = {prediction[i]}"
-            title += " (o)" if prediction[i] == label[i] else " (x)"
-            title += f"\nlabel = {label[i]}"
-        else:
-            title = f"label = {label[i]}"
-
-        ax.set_title(title, fontsize=12)
-        ax.set_xticks([])
-        ax.set_yticks([])
-        start_id += 1
-
-    plt.ioff()
-    plt.show(block=True)
-    input("Press Enter to exit...")  # 讓視窗不會馬上關閉
-
-
-# 建立 MNIST 資料
-(train_feature, train_label), (test_feature, test_label) = mnist.load_data()
-
-# 將 Feature 特徵值換為 4 維矩陣
+# 將測試資料的特徵值調整為 4 維張量 (批次大小, 高度, 寬度, 通道數)
 test_feature_vector = test_feature.reshape(
     len(test_feature), 28, 28, 1).astype("float32")
 
-# 特徵值標準化
+# 進行特徵標準化，將像素值 (0-255) 縮放至 0-1 之間
 test_feature_normalize = test_feature_vector / 255
 
-# Label 轉換為 One-Hot Encoding
-test_label_onehot = to_categorical(test_label)
+# 轉換標籤為 One-Hot 編碼
+test_label_onehot = keras.utils.to_categorical(test_label)
 
-# 載入模型
-model = "Mnist_cnn_model.h5"
-print("載入模型: "+model)
-model = load_model("Mnist_cnn_model.h5")
+# 載入已訓練的 CNN 模型
+model = keras.models.load_model("cnn_model.h5")
 
-# 評估準確率
-scores = model.evaluate(test_feature_normalize, test_label_onehot)
-print("\n準確率=", scores[1])
-
-# 預測
+# 進行預測，並取出最大機率的類別索引
 prediction = np.argmax(model.predict(test_feature_normalize), axis=1)
 
-# 顯示結果
-show_image_labels_prediction(test_feature, test_label, prediction, 0)
+# 顯示前幾筆預測結果
+for i in range(10):
+    print(f"預測結果: {prediction[i]}, 真實標籤: {test_label[i]}")
