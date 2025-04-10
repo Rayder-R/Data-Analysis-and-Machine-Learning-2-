@@ -5,7 +5,6 @@ import openvino as ov
 
 core = ov.Core()
 
-
 # create a directory for resnet model file
 MODEL_DIRECTORY_PATH = Path("model")
 MODEL_DIRECTORY_PATH.mkdir(exist_ok=True)

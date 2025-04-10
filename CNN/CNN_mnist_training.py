@@ -14,8 +14,6 @@ np.random.seed(10)
 print("原始訓練資料形狀:", train_feature.shape)  # (60000, 28, 28)
 print("原始測試資料形狀:", test_feature.shape)    # (10000, 28, 28)
 print("原始標籤 (前 10 筆):", train_label[:10])  # 顯示前 10 個標籤
-print("原始標籤 (前 10 筆):", train_label)  # 顯示前 10 個標籤
-
 
 # 轉換為 4D 張量 (批次大小, 高度, 寬度, 通道數)
 train_feature_vector = train_feature.reshape(-1, 28, 28, 1).astype("float32")
@@ -64,9 +62,9 @@ model = keras.Sequential([
     keras.layers.Dense(units=10, activation="softmax")
 ])
 
-# # 編譯模型
-# model.compile(loss="categorical_crossentropy",
-#               optimizer="adam", metrics=["accuracy"])
+# 編譯模型
+model.compile(loss="categorical_crossentropy",
+              optimizer="adam", metrics=["accuracy"])
 
 # # 訓練模型
 # train_history = model.fit(x=train_feature_normalize,
