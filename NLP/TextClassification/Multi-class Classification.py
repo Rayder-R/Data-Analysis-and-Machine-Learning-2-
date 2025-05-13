@@ -1,9 +1,9 @@
 # %%
 import tensorflow as tf
-import tensorflow.keras as keras
+import keras as keras
 import numpy as np
 import matplotlib.pyplot as plt
-
+# from tensorflow.keras.layers import BatchNormalization
 # %%
 vocab_size = 10000   # 詞彙表大小
 # %%
@@ -51,8 +51,8 @@ print("test_labels[0]:", test_labels[0])
 # %%
 model = keras.models.Sequential([
     keras.layers.Dense(64, activation='relu', input_shape=(10000,)),
-    keras.layers.Dropout(0.1),
-    keras.layers.Dense(46, activation='softmax')
+    keras.layers.BatchNormalization(),
+    keras.layers.Dense(46, activation='softmax',kernel_regularizer=keras.regularizers.l1_l2),
 ])
 model.build(input_shape=(None, vocab_size))  # (None, 10000)
 model.summary()
@@ -69,7 +69,7 @@ history = model.fit(
     train_data,
     train_labels,
     epochs=20,
-    batch_size=512,
+    batch_size=256,
     validation_split=0.2,
     # callbacks=[keras.callbacks.EarlyStopping(
     #     monitor='val_loss', patience=3, restore_best_weights=True)]

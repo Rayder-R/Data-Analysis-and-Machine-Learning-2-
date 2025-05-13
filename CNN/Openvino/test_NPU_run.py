@@ -46,4 +46,4 @@ results = compiled_model([input_data])[output_layer]
 print(f"Inference time: {time.time() - start_time:.2f}s")
 
 # 顯示輸出結果
-print("Output:", results)
+# print("Output:", results)
